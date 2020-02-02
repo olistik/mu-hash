@@ -1,8 +1,8 @@
 # Mu::Hash
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mu/hash`. To experiment with that code, run `bin/console` for an interactive prompt.
+Converts an Hash to an object whose attributes behave like methods.
 
-TODO: Delete this and the text above, and describe your gem
+Fights `NoMethodError` on `nil` objects by enforcing a strict access to your data structure. 💪
 
 ## Installation
 
@@ -14,15 +14,44 @@ gem 'mu-hash'
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install mu-hash
+```
+$ gem install mu-hash
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Suppose this is an hash you have to deal with:
+source = {
+  'service' => {
+    'username' => 'foo',
+    'password' => 'bar',
+  },
+}
+
+# Convert it to a Mu::Hash instance:
+content = Mu::Hash.new(source)
+
+# Here's how you can access values:
+content.service.username.unwrap # => 'foo'
+content.service.password.unwrap # => 'bar'
+
+content.service.unwrap # => { 'username' => 'foo', 'password' => 'bar' }
+
+content.service['username'].unwrap # => 'foo'
+content.service['password'].unwrap # => 'bar'
+
+content['service']['username'].unwrap # => 'foo'
+content['service']['password'].unwrap # => 'bar'
+
+content.service.something_that_does_not_exist # => raises a Mu::Hash::Error
+```
 
 ## Development
 
